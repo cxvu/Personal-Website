@@ -1,149 +1,151 @@
 # Natan — Personal Website
 
-Halaman profil pribadi (link in bio) statis, dengan foto profil & nama yang
-otomatis diambil dari akun Discord, kartu server Discord, dan kumpulan link
-social media. Dibuat pakai HTML, CSS, dan JavaScript murni — tanpa build
-tools, tanpa framework.
+A static personal bio-link page. Profile picture and display name are
+pulled automatically from a Discord account, plus a Discord server card
+and a set of social links. Built with plain HTML, CSS, and JavaScript —
+no build tools, no framework.
 
 <p align="center">
-  <img src="img/preview.jpg" alt="Preview tampilan Natan Bio Link" width="360">
+  <img src="img/preview.jpg" alt="Preview of Natan Bio Link" width="360">
 </p>
 
-## ✨ Fitur
+## Features
 
-- **Foto profil & nama otomatis dari Discord**, diambil real-time lewat
-  [Lanyard API](https://github.com/Phineas/lanyard) (tidak perlu update manual).
-- **Kartu server Discord** — menampilkan ikon, nama server, jumlah member,
-  dan tombol **Join** yang mengarah ke invite server kamu.
-- **Dark/Light mode otomatis**, mengikuti preferensi sistem, dengan opsi
-  disimpan di `localStorage` biar tidak "kedip" saat reload.
-- **Skeleton loading** — avatar, nama, dan kartu server menampilkan
-  placeholder pulsing saat data masih dimuat, dan fade-in halus begitu siap.
-- **Efek suara** saat klik di halaman.
-- **Fallback avatar statis** kalau Discord API sedang tidak bisa diakses.
-- Responsive — tampilan disesuaikan otomatis untuk mobile & desktop.
+- Profile picture and display name fetched automatically from Discord in
+  real time via the [Lanyard API](https://github.com/Phineas/lanyard) (no
+  manual updates needed).
+- Discord server card showing the server icon, name, member count, and a
+  Join button linking to your server invite.
+- Automatic dark/light mode based on system preference, saved in
+  `localStorage` to avoid flashing on reload.
+- Skeleton loading for avatar, name, and server card while data is being
+  fetched, with a smooth fade-in once ready.
+- Click sound effect.
+- Static avatar fallback if the Discord API is unreachable.
+- Responsive layout for both mobile and desktop.
 
-## 📁 Struktur folder
+## Folder structure
 
 ```
 Natan/
-├── index.html      # Struktur halaman (HTML)
-├── style.css        # Semua styling & tema warna
-├── script.js         # Logika: fetch data Discord, render avatar/kartu server, dll
+├── index.html      # Page structure (HTML)
+├── style.css        # Styling and color theme
+├── script.js         # Logic: fetch Discord data, render avatar/server card, etc.
 ├── img/
-│   ├── Natan.jpg     # Foto profil fallback (statis)
-│   ├── preview.jpg    # Screenshot preview untuk README
+│   ├── Natan.jpg     # Static fallback profile picture
+│   ├── preview.jpg    # Preview screenshot for the README
 │   └── favicon.ico
 └── audio/
-    └── click.ogg     # Efek suara saat klik
+    └── click.ogg     # Click sound effect
 ```
 
-## ⚙️ Cara konfigurasi
+## Configuration
 
-Semua pengaturan utama ada di bagian paling atas file **`script.js`**
-(`CONFIG` dan `PERSON_INFO`). Tidak perlu sentuh bagian lain kalau cuma mau
-ganti data.
+All the main settings live near the top of **`script.js`** (`CONFIG` and
+`PERSON_INFO`). You shouldn't need to touch anything else just to change
+your data.
 
-### 1. Data akun Discord
+### 1. Discord account data
 
 ```js
 const PERSON_INFO = {
-  discordId: "ISI_DENGAN_USER_ID_DISCORD_KAMU",
-  discordServerId: "ISI_DENGAN_SERVER_ID_DISCORD_KAMU",
-  discordInviteCode: "ISI_DENGAN_KODE_INVITE_KAMU", // bagian setelah discord.gg/
+  discordId: "YOUR_DISCORD_USER_ID",
+  discordServerId: "YOUR_DISCORD_SERVER_ID",
+  discordInviteCode: "YOUR_INVITE_CODE", // the part after discord.gg/
 };
 ```
 
-Cara mendapatkan ID & kode invite:
-1. Buka **Discord → Settings → Advanced**, aktifkan **Developer Mode**.
-2. Klik kanan foto profil kamu → **Copy User ID** → isi ke `discordId`.
-   ID ini juga dipakai untuk link ikon Discord di social links
-   (`https://discord.com/users/ID_KAMU`).
-3. Klik kanan ikon server kamu → **Copy Server ID** → isi ke `discordServerId`.
-4. Di salah satu channel, klik **Invite People** (atau klik kanan channel →
-   Invite People) → buat/pilih invite yang **permanen**
-   (Never Expire + Unlimited Uses) → salin kode setelah `discord.gg/` →
-   isi ke `discordInviteCode`.
+How to get the IDs and invite code:
+1. In Discord, go to **Settings → Advanced** and enable **Developer Mode**.
+2. Right-click your profile picture and select **Copy User ID**, then set
+   it as `discordId`. This ID is also used for the Discord icon link in
+   the social links section (`https://discord.com/users/YOUR_ID`).
+3. Right-click your server icon and select **Copy Server ID**, then set
+   it as `discordServerId`.
+4. In any channel, click **Invite People** (or right-click the channel →
+   Invite People), create or pick a **permanent invite** (Never Expire,
+   Unlimited Uses), and copy the code after `discord.gg/` into
+   `discordInviteCode`.
 
-> ⚠️ **Penting:** kode invite harus permanen. Kalau expired/limited, kartu
-> server akan menampilkan pesan error alih-alih data server.
+Note: the invite code must be permanent. If it expires or is limited, the
+server card will show an error message instead of your server data.
 
-Untuk kartu server bisa tampil, foto profil, dan nama otomatis muncul,
-akun Discord kamu harus terdaftar di
-**[Lanyard](https://github.com/Phineas/lanyard)** — caranya cukup join
-[server Discord Lanyard](https://discord.gg/lanyard) sekali (tidak perlu
-kirim pesan apa pun).
+For the server card, profile picture, and name to show up, your Discord
+account needs to be registered with
+[Lanyard](https://github.com/Phineas/lanyard) — just join the
+[Lanyard Discord server](https://discord.gg/lanyard) once, no message
+required.
 
-### 2. Tampilan avatar
+### 2. Avatar settings
 
 ```js
 const CONFIG = {
-  useDiscordAvatar: true,     // false = pakai gambar statis di img/Natan.jpg
-  decorationInFront: true,    // posisi dekorasi avatar Discord (kalau ada)
-  showStatus: false,          // tampilkan titik status online/idle/dnd
-  avatarSize: 190,            // ukuran avatar di desktop (px)
-  mobileAvatarSize: 150,      // ukuran avatar di mobile (px)
+  useDiscordAvatar: true,     // false = use the static image at img/Natan.jpg
+  decorationInFront: true,    // position of the Discord avatar decoration, if any
+  showStatus: false,          // show the online/idle/dnd status dot
+  avatarSize: 190,            // avatar size on desktop (px)
+  mobileAvatarSize: 150,      // avatar size on mobile (px)
 };
 ```
 
-### 3. Link social media
+### 3. Social links
 
-Edit langsung di **`index.html`**, pada bagian `<!-- Social links -->`.
-Cukup ganti nilai `href` di setiap tag `<a>` (urutan saat ini: GitHub →
-Discord → Instagram → Portofolio):
+Edit these directly in **`index.html`**, in the `<!-- Social links -->`
+section. Just change the `href` value on each `<a>` tag (current order:
+GitHub, Discord, Instagram, Portfolio):
 
 ```html
-<a href="https://github.com/USERNAME_KAMU" ...>
-<a href="https://discord.com/users/USER_ID_DISCORD_KAMU" ...>
-<a href="https://instagram.com/USERNAME_KAMU" ...>
-<a href="https://link-portofolio-kamu.com" ...>
+<a href="https://github.com/YOUR_USERNAME" ...>
+<a href="https://discord.com/users/YOUR_DISCORD_USER_ID" ...>
+<a href="https://instagram.com/YOUR_USERNAME" ...>
+<a href="https://your-portfolio-link.com" ...>
 ```
 
-Ikon Discord akan membuka halaman profil Discord kamu saat diklik
-(lewat `discord.com/users/<id>` — otomatis membuka aplikasi Discord kalau
-terinstal, atau versi web kalau tidak).
+The Discord icon opens your Discord profile when clicked (via
+`discord.com/users/<id>`) — it opens the Discord app if installed, or the
+web version otherwise.
 
-### 4. Judul & meta tag (SEO/preview link)
+### 4. Title and meta tags (SEO / link preview)
 
-Kalau mau ganti judul tab browser atau preview saat link dibagikan (di
-Discord/Twitter/WhatsApp dll), edit bagian `<head>` di **`index.html`**:
-`<title>`, `og:title`, `og:description`, `twitter:title`, dan
-`twitter:description`.
+To change the browser tab title or the preview shown when the link is
+shared (on Discord, Twitter, WhatsApp, etc.), edit the `<head>` section
+in **`index.html`**: `<title>`, `og:title`, `og:description`,
+`twitter:title`, and `twitter:description`.
 
-## 🚀 Menjalankan secara lokal
+## Running locally
 
-Karena halaman ini melakukan `fetch()` ke API eksternal, buka file lewat
-local server (bukan `file://`) supaya tidak kena masalah CORS di beberapa
-browser:
+Since this page makes `fetch()` calls to external APIs, open it through a
+local server (not `file://`) to avoid CORS issues in some browsers:
 
 ```bash
-# dari dalam folder Natan/
+# from inside the Natan/ folder
 python3 -m http.server 7700
-# lalu buka http://localhost:7700 di browser
+# then open http://localhost:7700 in your browser
 ```
 
-Atau pakai extension **Live Server** di VS Code.
+Or use the Live Server extension in VS Code.
 
-## 🌐 Deploy ke GitHub Pages
+## Deploying to GitHub Pages
 
-1. Buat repository baru di GitHub, lalu upload semua isi folder `Natan/`
-   (bukan foldernya, tapi isinya — `index.html` harus ada di root repo).
-2. Buka **Settings → Pages** di repo tersebut.
-3. Pada **Source**, pilih branch `main` dan folder `/ (root)`.
-4. Simpan — situs akan online di `https://USERNAME.github.io/NAMA_REPO/`
-   setelah beberapa menit.
+1. Create a new GitHub repository and upload the contents of the `Natan/`
+   folder (not the folder itself — `index.html` needs to be at the repo
+   root).
+2. Open **Settings → Pages** in that repository.
+3. Under **Source**, select the `main` branch and the `/ (root)` folder.
+4. Save — the site will be live at
+   `https://USERNAME.github.io/REPO_NAME/` after a few minutes.
 
-Kalau mau pakai domain sendiri, tambahkan file `CNAME` berisi domain kamu
-di root repo, lalu atur DNS-nya sesuai
-[dokumentasi GitHub Pages](https://docs.github.com/pages).
+If you want a custom domain, add a `CNAME` file with your domain at the
+repo root and configure DNS as described in the
+[GitHub Pages documentation](https://docs.github.com/pages).
 
-## 🛠️ Teknologi yang dipakai
+## Tech stack
 
-- HTML5 & CSS3 murni (tanpa framework)
-- Vanilla JavaScript (tanpa dependency/build step)
-- [Lanyard API](https://github.com/Phineas/lanyard) — data presence Discord
-- [Discord API](https://discord.com/developers/docs/intro) — data invite server
+- Plain HTML5 and CSS3 (no framework)
+- Vanilla JavaScript (no dependencies, no build step)
+- [Lanyard API](https://github.com/Phineas/lanyard) — Discord presence data
+- [Discord API](https://discord.com/developers/docs/intro) — server invite data
 
-## 📄 Lisensi
+## License
 
-Bebas dipakai dan dimodifikasi untuk keperluan pribadi.
+Free to use and modify for personal purposes.
