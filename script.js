@@ -46,7 +46,7 @@ const PERSON_INFO = {
   // Kode invite server Discord kamu (bagian setelah "discord.gg/").
   // WAJIB pakai invite PERMANEN (Never Expire + Unlimited Uses),
   // kalau tidak, kartu server akan menampilkan pesan error.
-  discordInviteCode: "KxETrb8FHh",
+  discordInviteCode: "ZZEkKjgk4V",
 };
 
 // Base URL Discord CDN, dipakai untuk membangun link avatar/icon server
